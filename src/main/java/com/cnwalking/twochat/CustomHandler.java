@@ -8,7 +8,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.*;
 import io.netty.util.CharsetUtil;
 
-public class customHandler extends SimpleChannelInboundHandler<HttpObject> {
+public class CustomHandler extends SimpleChannelInboundHandler<HttpObject> {
 
     // SimpleChannelInboundHandler相当于就是个入口
 

@@ -15,7 +15,7 @@ public class ServerInitializer extends ChannelInitializer<SocketChannel> {
         // pipeline 里面有很多handler,下面的操作添加了一个handler(类似拦截器),是Netty自己提供的一个http编解码api
         pipeline.addLast("HttpServerCodec", new HttpServerCodec());
         // 再添加一个自定义的助手类
-        pipeline.addLast("customHandler", new customHandler());
+        pipeline.addLast("customHandler", new CustomHandler());
 
     }
 }
