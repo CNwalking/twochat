@@ -5,40 +5,30 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * chat_msg
+ * friends_request
  * @author 
  */
 @Data
 public class FriendsRequest implements Serializable {
     /**
-     * 用户id
+     * 请求的id
      */
     private String id;
 
     /**
-     * 发送方id
+     * 发送的用户id
      */
     private String sendUserId;
 
     /**
-     * 接受方id
+     * 接受的用户id
      */
     private String acceptUserId;
 
     /**
-     * 小头像
+     * 发送时间
      */
-    private String msg;
-
-    /**
-     * 大头像
-     */
-    private Integer signFlag;
-
-    /**
-     * 昵称
-     */
-    private Date createTime;
+    private Date requestDateTime;
 
     private static final long serialVersionUID = 1L;
 }

@@ -3,96 +3,61 @@
 <mapper namespace="com.cnwalking.twochat.dao.MappingDao">
   <resultMap id="BaseResultMap" type="com.cnwalking.twochat.dataobject.entity.Mapping">
     <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="send_user_id" jdbcType="VARCHAR" property="sendUserId" />
-    <result column="accept_user_id" jdbcType="VARCHAR" property="acceptUserId" />
-    <result column="msg" jdbcType="VARCHAR" property="msg" />
-    <result column="sign_flag" jdbcType="INTEGER" property="signFlag" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="my_user_id" jdbcType="VARCHAR" property="myUserId" />
+    <result column="friend_user_id" jdbcType="VARCHAR" property="friendUserId" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, send_user_id, accept_user_id, msg, sign_flag, create_time
+    id, my_user_id, friend_user_id
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from chat_msg
+    from mapping
     where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from chat_msg
+    delete from mapping
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.cnwalking.twochat.dataobject.entity.Mapping" useGeneratedKeys="true">
-    insert into chat_msg (send_user_id, accept_user_id, msg, 
-      sign_flag, create_time)
-    values (#{sendUserId,jdbcType=VARCHAR}, #{acceptUserId,jdbcType=VARCHAR}, #{msg,jdbcType=VARCHAR}, 
-      #{signFlag,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+    insert into mapping (my_user_id, friend_user_id)
+    values (#{myUserId,jdbcType=VARCHAR}, #{friendUserId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.cnwalking.twochat.dataobject.entity.Mapping" useGeneratedKeys="true">
-    insert into chat_msg
+    insert into mapping
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="sendUserId != null">
-        send_user_id,
+      <if test="myUserId != null">
+        my_user_id,
       </if>
-      <if test="acceptUserId != null">
-        accept_user_id,
-      </if>
-      <if test="msg != null">
-        msg,
-      </if>
-      <if test="signFlag != null">
-        sign_flag,
-      </if>
-      <if test="createTime != null">
-        create_time,
+      <if test="friendUserId != null">
+        friend_user_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="sendUserId != null">
-        #{sendUserId,jdbcType=VARCHAR},
+      <if test="myUserId != null">
+        #{myUserId,jdbcType=VARCHAR},
       </if>
-      <if test="acceptUserId != null">
-        #{acceptUserId,jdbcType=VARCHAR},
-      </if>
-      <if test="msg != null">
-        #{msg,jdbcType=VARCHAR},
-      </if>
-      <if test="signFlag != null">
-        #{signFlag,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
+      <if test="friendUserId != null">
+        #{friendUserId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.cnwalking.twochat.dataobject.entity.Mapping">
-    update chat_msg
+    update mapping
     <set>
-      <if test="sendUserId != null">
-        send_user_id = #{sendUserId,jdbcType=VARCHAR},
+      <if test="myUserId != null">
+        my_user_id = #{myUserId,jdbcType=VARCHAR},
       </if>
-      <if test="acceptUserId != null">
-        accept_user_id = #{acceptUserId,jdbcType=VARCHAR},
-      </if>
-      <if test="msg != null">
-        msg = #{msg,jdbcType=VARCHAR},
-      </if>
-      <if test="signFlag != null">
-        sign_flag = #{signFlag,jdbcType=INTEGER},
-      </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
+      <if test="friendUserId != null">
+        friend_user_id = #{friendUserId,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.cnwalking.twochat.dataobject.entity.Mapping">
-    update chat_msg
-    set send_user_id = #{sendUserId,jdbcType=VARCHAR},
-      accept_user_id = #{acceptUserId,jdbcType=VARCHAR},
-      msg = #{msg,jdbcType=VARCHAR},
-      sign_flag = #{signFlag,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
+    update mapping
+    set my_user_id = #{myUserId,jdbcType=VARCHAR},
+      friend_user_id = #{friendUserId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
 </mapper>

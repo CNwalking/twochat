@@ -1,7 +1,9 @@
 package com.cnwalking.twochat.dao;
 
 import com.cnwalking.twochat.dataobject.entity.ChatMsg;
+import org.apache.ibatis.annotations.Mapper;
 
+@Mapper
 public interface ChatMsgDao {
     int deleteByPrimaryKey(String id);
 

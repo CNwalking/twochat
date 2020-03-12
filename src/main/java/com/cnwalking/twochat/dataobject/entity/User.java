@@ -1,11 +1,10 @@
 package com.cnwalking.twochat.dataobject.entity;
 
 import java.io.Serializable;
-import java.util.Date;
 import lombok.Data;
 
 /**
- * chat_msg
+ * user
  * @author 
  */
 @Data
@@ -16,29 +15,39 @@ public class User implements Serializable {
     private String id;
 
     /**
-     * 发送方id
+     * 用户名
      */
-    private String sendUserId;
+    private String username;
 
     /**
-     * 接受方id
+     * 密码
      */
-    private String acceptUserId;
+    private String password;
 
     /**
      * 小头像
      */
-    private String msg;
+    private String faceImg;
 
     /**
      * 大头像
      */
-    private Integer signFlag;
+    private String faceImgBig;
 
     /**
      * 昵称
      */
-    private Date createTime;
+    private String nickname;
+
+    /**
+     * 二维码
+     */
+    private String qrcode;
+
+    /**
+     * 设备id
+     */
+    private String cid;
 
     private static final long serialVersionUID = 1L;
 }

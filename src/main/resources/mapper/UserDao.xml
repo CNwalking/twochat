@@ -3,96 +3,128 @@
 <mapper namespace="com.cnwalking.twochat.dao.UserDao">
   <resultMap id="BaseResultMap" type="com.cnwalking.twochat.dataobject.entity.User">
     <id column="id" jdbcType="VARCHAR" property="id" />
-    <result column="send_user_id" jdbcType="VARCHAR" property="sendUserId" />
-    <result column="accept_user_id" jdbcType="VARCHAR" property="acceptUserId" />
-    <result column="msg" jdbcType="VARCHAR" property="msg" />
-    <result column="sign_flag" jdbcType="INTEGER" property="signFlag" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="username" jdbcType="VARCHAR" property="username" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="face_img" jdbcType="VARCHAR" property="faceImg" />
+    <result column="face_img_big" jdbcType="VARCHAR" property="faceImgBig" />
+    <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="qrcode" jdbcType="VARCHAR" property="qrcode" />
+    <result column="cid" jdbcType="VARCHAR" property="cid" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, send_user_id, accept_user_id, msg, sign_flag, create_time
+    id, username, `password`, face_img, face_img_big, nickname, qrcode, cid
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from chat_msg
+    from user
     where id = #{id,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
-    delete from chat_msg
+    delete from user
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.cnwalking.twochat.dataobject.entity.User" useGeneratedKeys="true">
-    insert into chat_msg (send_user_id, accept_user_id, msg, 
-      sign_flag, create_time)
-    values (#{sendUserId,jdbcType=VARCHAR}, #{acceptUserId,jdbcType=VARCHAR}, #{msg,jdbcType=VARCHAR}, 
-      #{signFlag,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
+    insert into user (id,username, `password`, face_img,
+      face_img_big, nickname, qrcode, 
+      cid)
+    values (#{id},#{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, #{faceImg,jdbcType=VARCHAR},
+      #{faceImgBig,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR}, #{qrcode,jdbcType=VARCHAR}, 
+      #{cid,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.cnwalking.twochat.dataobject.entity.User" useGeneratedKeys="true">
-    insert into chat_msg
+    insert into user
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="sendUserId != null">
-        send_user_id,
+      <if test="username != null">
+        username,
       </if>
-      <if test="acceptUserId != null">
-        accept_user_id,
+      <if test="password != null">
+        `password`,
       </if>
-      <if test="msg != null">
-        msg,
+      <if test="faceImg != null">
+        face_img,
       </if>
-      <if test="signFlag != null">
-        sign_flag,
+      <if test="faceImgBig != null">
+        face_img_big,
       </if>
-      <if test="createTime != null">
-        create_time,
+      <if test="nickname != null">
+        nickname,
+      </if>
+      <if test="qrcode != null">
+        qrcode,
+      </if>
+      <if test="cid != null">
+        cid,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="sendUserId != null">
-        #{sendUserId,jdbcType=VARCHAR},
+      <if test="username != null">
+        #{username,jdbcType=VARCHAR},
       </if>
-      <if test="acceptUserId != null">
-        #{acceptUserId,jdbcType=VARCHAR},
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
       </if>
-      <if test="msg != null">
-        #{msg,jdbcType=VARCHAR},
+      <if test="faceImg != null">
+        #{faceImg,jdbcType=VARCHAR},
       </if>
-      <if test="signFlag != null">
-        #{signFlag,jdbcType=INTEGER},
+      <if test="faceImgBig != null">
+        #{faceImgBig,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
+      <if test="nickname != null">
+        #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="qrcode != null">
+        #{qrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="cid != null">
+        #{cid,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.cnwalking.twochat.dataobject.entity.User">
-    update chat_msg
+    update user
     <set>
-      <if test="sendUserId != null">
-        send_user_id = #{sendUserId,jdbcType=VARCHAR},
+      <if test="username != null">
+        username = #{username,jdbcType=VARCHAR},
       </if>
-      <if test="acceptUserId != null">
-        accept_user_id = #{acceptUserId,jdbcType=VARCHAR},
+      <if test="password != null">
+        `password` = #{password,jdbcType=VARCHAR},
       </if>
-      <if test="msg != null">
-        msg = #{msg,jdbcType=VARCHAR},
+      <if test="faceImg != null">
+        face_img = #{faceImg,jdbcType=VARCHAR},
       </if>
-      <if test="signFlag != null">
-        sign_flag = #{signFlag,jdbcType=INTEGER},
+      <if test="faceImgBig != null">
+        face_img_big = #{faceImgBig,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
+      <if test="nickname != null">
+        nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="qrcode != null">
+        qrcode = #{qrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="cid != null">
+        cid = #{cid,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.cnwalking.twochat.dataobject.entity.User">
-    update chat_msg
-    set send_user_id = #{sendUserId,jdbcType=VARCHAR},
-      accept_user_id = #{acceptUserId,jdbcType=VARCHAR},
-      msg = #{msg,jdbcType=VARCHAR},
-      sign_flag = #{signFlag,jdbcType=INTEGER},
-      create_time = #{createTime,jdbcType=TIMESTAMP}
+    update user
+    set username = #{username,jdbcType=VARCHAR},
+      `password` = #{password,jdbcType=VARCHAR},
+      face_img = #{faceImg,jdbcType=VARCHAR},
+      face_img_big = #{faceImgBig,jdbcType=VARCHAR},
+      nickname = #{nickname,jdbcType=VARCHAR},
+      qrcode = #{qrcode,jdbcType=VARCHAR},
+      cid = #{cid,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+
+  <select id="selectByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user
+    where username = #{username}
+  </select>
+
 </mapper>

@@ -29,7 +29,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
             ele.writeAndFlush(new TextWebSocketFrame("[method 1]Time now " + LocalDateTime.now() + " msg is " + content));
         });
         // ==== 方法2 ====
-        ClientGroup.writeAndFlush(new TextWebSocketFrame("[method 2]Time now " + LocalDateTime.now() + " msg is " + content));
+//        ClientGroup.writeAndFlush(new TextWebSocketFrame("[method 2]Time now " + LocalDateTime.now() + " msg is " + content));
 
     }
 
