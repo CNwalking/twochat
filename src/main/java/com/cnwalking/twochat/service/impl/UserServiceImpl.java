@@ -25,26 +25,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean checkPswd(String username,String password) {
+    public User checkPswd(String username,String password) {
         User user = userDao.selectByUsername(username);
         if (!StringUtils.equals(user.getPassword(), MD5Encrypt.md5Encrypt(password))){
             log.info("数据库里的:{},加密完的数据:{}",user.getPassword(),MD5Encrypt.md5Encrypt(password));
-            return false;
+            return null;
         }
-        return true;
+        return user;
     }
 
     @Override
-    public User register(String username, String password) {
+    public User register(String username, String password, String cid) {
         User user = new User();
         String userId = Sid.nextShort();
         user.setId(userId);
         user.setFaceImgBig("");
-        user.setNickname("");
+        user.setNickname(username);
         user.setQrcode("");
         user.setUsername(username);
         user.setPassword(MD5Encrypt.md5Encrypt(password));
         user.setFaceImg("");
+        user.setCid(cid);
         userDao.insert(user);
         return user;
     }

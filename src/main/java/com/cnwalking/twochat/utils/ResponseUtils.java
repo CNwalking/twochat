@@ -8,21 +8,17 @@ public class ResponseUtils {
         Response<T> response = new Response<>();
         response.setMessage("成功");
         response.setData(data);
+        response.setCode(200);
         return response;
     }
 
     public static Response returnDefaultSuccess() {
         Response response = new Response();
         response.setMessage("操作成功");
+        response.setCode(200);
         return response;
     }
 
-
-    public static Response returnMsgSuccess(String msg) {
-        Response response = new Response();
-        response.setMessage(msg);
-        return response;
-    }
 
     public static <T> Response<T> returnInfo(int code, String message,T t) {
         Response response = new Response();
@@ -39,38 +35,10 @@ public class ResponseUtils {
         return response;
     }
 
-//    public static Response returnError(ReturnCode returnCode) {
-//        Response response = new Response();
-//        response.setCode(returnCode.getCode());
-//        response.setMessage(returnCode.getDesc());
-//        return response;
-//    }
-
     public static Response returnDefaultError() {
         Response response = new Response();
-        response.setCode(407);
-        response.setMessage("系统内部异常");
-        return response;
-    }
-
-    public static Response returnOperationError() {
-        Response response = new Response();
-        response.setCode(408);
-        response.setMessage("插入或者更新失败");
-        return response;
-    }
-
-    public static Response returnGetValueError() {
-        Response response = new Response();
-        response.setCode(409);
-        response.setMessage("获取数据失败");
-        return response;
-    }
-
-    public static Response returnTokenError() {
-        Response response = new Response();
         response.setCode(400);
-        response.setMessage("Token异常");
+        response.setMessage("系统内部异常");
         return response;
     }
 
