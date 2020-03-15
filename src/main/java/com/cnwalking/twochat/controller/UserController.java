@@ -191,6 +191,9 @@ public class UserController {
             // 接受就先添加mapping表里,再删除
             userService.insertIntoMapping(sendUserId, acceptUserId);
             userService.deleteAddFriendsReq(sendUserId,acceptUserId);
+            // 如果两边都互相发了请求,就要删除两个请求
+            userService.deleteAddFriendsReq(acceptUserId,sendUserId);
+
         }
         return ResponseUtils.returnDefaultSuccess();
     }

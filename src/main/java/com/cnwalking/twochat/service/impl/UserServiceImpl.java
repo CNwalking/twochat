@@ -152,7 +152,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteAddFriendsReq(String sendUserId,String acceptUserId) {
         FriendsRequest request = friendsRequestDao.selectBySendId(sendUserId,acceptUserId);
-        friendsRequestDao.deleteByPrimaryKey(request.getId());
+        if (!ObjectUtils.isEmpty(request)) {
+            friendsRequestDao.deleteByPrimaryKey(request.getId());
+        }
     }
 
     @Override
@@ -162,8 +164,8 @@ public class UserServiceImpl implements UserService {
         mapping1.setId(id1);
         mapping1.setMyUserId(sendUserId);
         mapping1.setFriendUserId(acceptUserId);
-        Mapping mapping2= new Mapping();
 
+        Mapping mapping2= new Mapping();
         String id2 = Sid.nextShort();
         mapping2.setId(id2);
         mapping2.setMyUserId(sendUserId);

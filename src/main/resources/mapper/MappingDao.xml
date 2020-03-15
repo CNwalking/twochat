@@ -20,8 +20,8 @@
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.cnwalking.twochat.dataobject.entity.Mapping" useGeneratedKeys="true">
-    insert into mapping (my_user_id, friend_user_id)
-    values (#{myUserId,jdbcType=VARCHAR}, #{friendUserId,jdbcType=VARCHAR})
+    insert into mapping (id,my_user_id, friend_user_id)
+    values (#{id},#{myUserId,jdbcType=VARCHAR}, #{friendUserId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.cnwalking.twochat.dataobject.entity.Mapping" useGeneratedKeys="true">
     insert into mapping
