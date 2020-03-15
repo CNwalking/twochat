@@ -21,9 +21,9 @@
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.cnwalking.twochat.dataobject.entity.FriendsRequest" useGeneratedKeys="true">
-    insert into friends_request (send_user_id, accept_user_id, request_date_time
+    insert into friends_request (id,send_user_id, accept_user_id, request_date_time
       )
-    values (#{sendUserId,jdbcType=VARCHAR}, #{acceptUserId,jdbcType=VARCHAR}, #{requestDateTime,jdbcType=TIMESTAMP}
+    values (#{id},#{sendUserId,jdbcType=VARCHAR}, #{acceptUserId,jdbcType=VARCHAR}, #{requestDateTime,jdbcType=TIMESTAMP}
       )
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.cnwalking.twochat.dataobject.entity.FriendsRequest" useGeneratedKeys="true">
@@ -73,4 +73,11 @@
       request_date_time = #{requestDateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+
+  <select id="selectBySendId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from friends_request
+    where send_user_id = #{sendUserId} and accept_user_id = #{acceptUserId}
+  </select>
 </mapper>

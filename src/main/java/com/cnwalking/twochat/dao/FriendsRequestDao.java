@@ -2,6 +2,9 @@ package com.cnwalking.twochat.dao;
 
 import com.cnwalking.twochat.dataobject.entity.FriendsRequest;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 @Mapper
 public interface FriendsRequestDao {
@@ -16,4 +19,7 @@ public interface FriendsRequestDao {
     int updateByPrimaryKeySelective(FriendsRequest record);
 
     int updateByPrimaryKey(FriendsRequest record);
+
+    FriendsRequest selectBySendId(@Param("sendUserId") String sendUserId, @Param("acceptUserId") String acceptUserId);
+
 }

@@ -1,6 +1,10 @@
 package com.cnwalking.twochat.service.impl;
 
+import com.cnwalking.twochat.dao.FriendsRequestDao;
+import com.cnwalking.twochat.dao.MappingDao;
 import com.cnwalking.twochat.dao.UserDao;
+import com.cnwalking.twochat.dataobject.entity.FriendsRequest;
+import com.cnwalking.twochat.dataobject.entity.Mapping;
 import com.cnwalking.twochat.dataobject.entity.User;
 import com.cnwalking.twochat.service.UserService;
 import com.cnwalking.twochat.utils.FastDFSClient;
@@ -8,6 +12,7 @@ import com.cnwalking.twochat.utils.FileUtils;
 import com.cnwalking.twochat.utils.MD5Encrypt;
 import com.cnwalking.twochat.utils.QRCodeUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.n3r.idworker.Sid;
@@ -16,6 +21,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -26,6 +33,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private MappingDao mappingDao;
+
+    @Autowired
+    private FriendsRequestDao friendsRequestDao;
 
     @Autowired
     private QRCodeUtils qrCodeUtils;
@@ -81,6 +94,53 @@ public class UserServiceImpl implements UserService {
     @Override
     public User selectById(String userId) {
         return userDao.selectByPrimaryKey(userId);
+    }
+
+    @Override
+    public User selectByUsername(String username) {
+        return userDao.selectByUsername(username);
+    }
+
+    @Override
+    public String searchUserListByName(String userId, String username) {
+        String resultMsg = "";
+        // 情况1 搜索的用户不存在
+        User serchTarget = userDao.selectByUsername(username);
+        if (ObjectUtils.isEmpty(serchTarget)) {
+            return "User does not exist";
+        }
+        String targetUserId = serchTarget.getId();
+        // 情况2 搜索的用户是自己
+        if (targetUserId.equals(userId)) {
+            return "You can not add yourself";
+        }
+        // 情况3 搜索的用户已经是好友了
+        List<Mapping> mappingList = mappingDao.selectByMyUserId(userId);
+        if (!CollectionUtils.isEmpty(mappingList)) {
+            for (int i = 0; i < mappingList.size(); i++) {
+                if (mappingList.get(i).getFriendUserId().equals(targetUserId)) {
+                    return "He is already your friends";
+                }
+            }
+        }
+        return resultMsg;
+    }
+
+    @Override
+    public String sendAddFriendsRequest(String userId, String friendId) {
+        // 不能重复提交
+        FriendsRequest request = friendsRequestDao.selectBySendId(userId,friendId);
+        if (!ObjectUtils.isEmpty(request)) {
+            return "Already Send Add Friends Request";
+        }
+        FriendsRequest insertRequest = new FriendsRequest();
+        String reqId = Sid.nextShort();
+        insertRequest.setId(reqId);
+        insertRequest.setSendUserId(userId);
+        insertRequest.setAcceptUserId(friendId);
+        insertRequest.setRequestDateTime(new Date());
+        friendsRequestDao.insert(insertRequest);
+        return "Send success";
     }
 
 

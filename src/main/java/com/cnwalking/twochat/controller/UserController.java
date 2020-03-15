@@ -101,7 +101,7 @@ public class UserController {
             @ApiParam(name = "nickName", value = "用户昵称") @RequestParam(value = "nickName") String nickName
     ) throws Exception{
         log.info("设置昵称, userId:{},nickName:{}", userId,nickName);
-        if (StringUtils.isBlank(nickName)) {
+        if (StringUtils.isBlank(nickName)|| StringUtils.isBlank(userId)) {
             return ResponseUtils.returnDefaultError();
         }
         // 更新用户头像
@@ -112,6 +112,44 @@ public class UserController {
         UserDto dto = new UserDto();
         BeanUtils.copyProperties(userService.selectById(userId),dto);
         return ResponseUtils.returnSuccess(dto);
+    }
+
+    @ApiOperation(value = "搜索好友", notes = "搜索好友")
+    @PostMapping(value = "/searchFriends")
+    public Response searchFriends(
+            @ApiParam(name = "userId", value = "本人的用户id") @RequestParam(value = "userId") String userId,
+            @ApiParam(name = "username", value = "搜索目标的用户名") @RequestParam(value = "username") String username
+    ) throws Exception{
+        log.info("搜索好友, userId:{},username:{}", userId,username);
+        if (StringUtils.isBlank(username) || StringUtils.isBlank(userId)) {
+            return ResponseUtils.returnDefaultError();
+        }
+        String msg = userService.searchUserListByName(userId,username);
+        if (!msg.equals("")) {
+            return ResponseUtils.returnError(400,msg);
+        }
+        User targetUser = userService.selectByUsername(username);
+        UserDto dto = new UserDto();
+        BeanUtils.copyProperties(targetUser,dto);
+        return ResponseUtils.returnSuccess(dto);
+    }
+
+    @ApiOperation(value = "发送添加好友请求", notes = "发送添加好友请求")
+    @PostMapping(value = "/addFriends")
+    public Response addFriends(
+            @ApiParam(name = "userId", value = "本人的用户id") @RequestParam(value = "userId") String userId,
+            @ApiParam(name = "friendId", value = "搜索目标的用户id") @RequestParam(value = "friendId") String friendId
+    ) throws Exception{
+        log.info("发送添加好友请求, userId:{},friendId:{}", userId,friendId);
+        if (StringUtils.isBlank(friendId) || StringUtils.isBlank(userId)) {
+            return ResponseUtils.returnDefaultError();
+        }
+        // 添加到friends_request表中去
+        String msg = userService.sendAddFriendsRequest(userId, friendId);
+        if (msg.equals("Already Send Add Friends Request")) {
+            return ResponseUtils.returnError(400, msg);
+        }
+        return ResponseUtils.returnSuccess(msg);
     }
 
 }

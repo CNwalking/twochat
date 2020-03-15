@@ -60,4 +60,11 @@
       friend_user_id = #{friendUserId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+
+  <select id="selectByMyUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from mapping
+    where my_user_id = #{myUserId}
+  </select>
 </mapper>

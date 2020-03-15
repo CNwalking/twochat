@@ -3,6 +3,8 @@ package com.cnwalking.twochat.service;
 
 import com.cnwalking.twochat.dataobject.entity.User;
 
+import java.util.List;
+
 public interface UserService {
     boolean userNameIsExist(String username);
 
@@ -13,4 +15,10 @@ public interface UserService {
     void update(User user);
 
     User selectById(String userId);
+
+    User selectByUsername(String username);
+
+    String searchUserListByName(String userId ,String username);
+
+    String sendAddFriendsRequest(String userId, String friendId);
 }
