@@ -9,4 +9,8 @@ public interface UserService {
     User checkPswd(String username,String password);
 
     User register(String username, String password, String cid);
+
+    void update(User user);
+
+    User selectById(String userId);
 }
