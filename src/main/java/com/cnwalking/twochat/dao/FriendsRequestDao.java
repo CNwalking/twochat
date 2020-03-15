@@ -1,5 +1,6 @@
 package com.cnwalking.twochat.dao;
 
+import com.cnwalking.twochat.dataobject.dto.FriendRequestDto;
 import com.cnwalking.twochat.dataobject.entity.FriendsRequest;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -22,4 +23,5 @@ public interface FriendsRequestDao {
 
     FriendsRequest selectBySendId(@Param("sendUserId") String sendUserId, @Param("acceptUserId") String acceptUserId);
 
+    List<FriendRequestDto> sendList(String acceptUserId);
 }

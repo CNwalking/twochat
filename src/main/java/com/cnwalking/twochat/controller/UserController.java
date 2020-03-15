@@ -1,6 +1,7 @@
 package com.cnwalking.twochat.controller;
 
 import com.cnwalking.twochat.common.Response;
+import com.cnwalking.twochat.dataobject.dto.FriendRequestDto;
 import com.cnwalking.twochat.dataobject.dto.UserDto;
 import com.cnwalking.twochat.dataobject.dto.UserVo;
 import com.cnwalking.twochat.dataobject.entity.User;
@@ -18,6 +19,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Slf4j
 @Api(tags = "UserController", description = "用户模块")
@@ -151,5 +154,46 @@ public class UserController {
         }
         return ResponseUtils.returnSuccess(msg);
     }
+
+    @ApiOperation(value = "获取好友请求列表", notes = "获取好友请求列表")
+    @PostMapping(value = "/addFriendsReqList")
+    public Response addFriendsReqList(
+            @ApiParam(name = "userId", value = "用户id") @RequestParam(value = "userId") String userId
+    ) throws Exception{
+        log.info("获取好友请求列表, userId:{}", userId);
+        if (StringUtils.isBlank(userId)) {
+            return ResponseUtils.returnDefaultError();
+        }
+        // 添加到friends_request表中去
+        List<FriendRequestDto> dtoList = userService.sendList(userId);
+        return ResponseUtils.returnSuccess(dtoList);
+    }
+
+    @ApiOperation(value = "操作好友请求", notes = "获取好友请求列表")
+    @PostMapping(value = "/operFriendRequest")
+    public Response addFriendsReqList(
+            @ApiParam(name = "acceptUserId", value = "接收方用户id") @RequestParam(value = "acceptUserId") String acceptUserId,
+            @ApiParam(name = "sendUserId", value = "发送方用户id") @RequestParam(value = "sendUserId") String sendUserId,
+            @ApiParam(name = "operType", value = "操作类型") @RequestParam(value = "operType") Integer operType
+    ) throws Exception{
+        log.info("操作好友请求, acceptUserId:{},sendUserId:{},operType:{}", acceptUserId, sendUserId, operType);
+        if (StringUtils.isBlank(sendUserId) || StringUtils.isBlank(acceptUserId) || operType == null) {
+            return ResponseUtils.returnDefaultError();
+        }
+        if (operType != 1 && operType != 0) {
+            return ResponseUtils.returnDefaultError();
+        }
+        // 0 忽略,1 接受
+        if (operType == 0) {
+            // 忽略就直接删除
+            userService.deleteAddFriendsReq(sendUserId,acceptUserId);
+        }else {
+            // 接受就先添加mapping表里,再删除
+            userService.insertIntoMapping(sendUserId, acceptUserId);
+            userService.deleteAddFriendsReq(sendUserId,acceptUserId);
+        }
+        return ResponseUtils.returnDefaultSuccess();
+    }
+
 
 }

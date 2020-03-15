@@ -1,6 +1,7 @@
 package com.cnwalking.twochat.service;
 
 
+import com.cnwalking.twochat.dataobject.dto.FriendRequestDto;
 import com.cnwalking.twochat.dataobject.entity.User;
 
 import java.util.List;
@@ -21,4 +22,10 @@ public interface UserService {
     String searchUserListByName(String userId ,String username);
 
     String sendAddFriendsRequest(String userId, String friendId);
+
+    List<FriendRequestDto> sendList(String acceptUserId);
+
+    void deleteAddFriendsReq(String sendUserId,String acceptUserId);
+
+    void insertIntoMapping(String sendUserId, String acceptUserId);
 }

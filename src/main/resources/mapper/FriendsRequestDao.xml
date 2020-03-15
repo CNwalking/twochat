@@ -80,4 +80,12 @@
     from friends_request
     where send_user_id = #{sendUserId} and accept_user_id = #{acceptUserId}
   </select>
+
+  <select id="sendList" resultType="com.cnwalking.twochat.dataobject.dto.FriendRequestDto" parameterType="String">
+        select u.id as sendUserId ,u.username as sendUsername, u.face_img as sendFaceImg,u.nickname as sendNickname
+        from friends_request fr
+        left join user u on fr.send_user_id = u.id
+        where fr.accept_user_id = #{acceptUserId} and fr.request_date_time!=''
+  </select>
+
 </mapper>

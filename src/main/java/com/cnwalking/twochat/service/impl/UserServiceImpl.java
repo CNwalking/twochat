@@ -3,6 +3,7 @@ package com.cnwalking.twochat.service.impl;
 import com.cnwalking.twochat.dao.FriendsRequestDao;
 import com.cnwalking.twochat.dao.MappingDao;
 import com.cnwalking.twochat.dao.UserDao;
+import com.cnwalking.twochat.dataobject.dto.FriendRequestDto;
 import com.cnwalking.twochat.dataobject.entity.FriendsRequest;
 import com.cnwalking.twochat.dataobject.entity.Mapping;
 import com.cnwalking.twochat.dataobject.entity.User;
@@ -143,5 +144,32 @@ public class UserServiceImpl implements UserService {
         return "Send success";
     }
 
+    @Override
+    public List<FriendRequestDto> sendList(String acceptUserId) {
+        return friendsRequestDao.sendList(acceptUserId);
+    }
 
+    @Override
+    public void deleteAddFriendsReq(String sendUserId,String acceptUserId) {
+        FriendsRequest request = friendsRequestDao.selectBySendId(sendUserId,acceptUserId);
+        friendsRequestDao.deleteByPrimaryKey(request.getId());
+    }
+
+    @Override
+    public void insertIntoMapping(String sendUserId, String acceptUserId) {
+        Mapping mapping1= new Mapping();
+        String id1 = Sid.nextShort();
+        mapping1.setId(id1);
+        mapping1.setMyUserId(sendUserId);
+        mapping1.setFriendUserId(acceptUserId);
+        Mapping mapping2= new Mapping();
+
+        String id2 = Sid.nextShort();
+        mapping2.setId(id2);
+        mapping2.setMyUserId(sendUserId);
+        mapping2.setFriendUserId(acceptUserId);
+
+        mappingDao.insert(mapping1);
+        mappingDao.insert(mapping2);
+    }
 }
