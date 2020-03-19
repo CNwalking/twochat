@@ -2,7 +2,11 @@ package com.cnwalking.twochat.service;
 
 
 import com.cnwalking.twochat.dataobject.dto.FriendRequestDto;
+import com.cnwalking.twochat.dataobject.dto.FriendsListDto;
+import com.cnwalking.twochat.dataobject.dto.UserDto;
+import com.cnwalking.twochat.dataobject.entity.ChatMsg;
 import com.cnwalking.twochat.dataobject.entity.User;
+import com.cnwalking.twochat.websocket.MsgOfChat;
 
 import java.util.List;
 
@@ -28,4 +32,13 @@ public interface UserService {
     void deleteAddFriendsReq(String sendUserId,String acceptUserId);
 
     void insertIntoMapping(String sendUserId, String acceptUserId);
+
+    List<FriendsListDto> getFriendsList(String userId);
+
+    String saveMsg(MsgOfChat chatMsg);
+
+    void updateMsgSigned(List<String> msgIdList);
+
+    List<ChatMsg> getUnReadMsgList(String acceptUserId);
+
 }

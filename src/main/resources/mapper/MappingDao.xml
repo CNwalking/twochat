@@ -67,4 +67,15 @@
     from mapping
     where my_user_id = #{myUserId}
   </select>
+
+  <select id="selectFriendListByMyUserId" resultType="com.cnwalking.twochat.dataobject.dto.FriendsListDto">
+    select
+        u.id as friendUserId,
+        u.username as friendUsername,
+        u.face_img as friendFaceImg,
+        u.nickname as friendNickname
+    from mapping m left join user u on u.id = m.friend_user_id
+    where m.my_user_id = #{myUserId}
+  </select>
+
 </mapper>

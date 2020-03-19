@@ -1,5 +1,6 @@
 package com.cnwalking.twochat.dao;
 
+import com.cnwalking.twochat.dataobject.dto.FriendsListDto;
 import com.cnwalking.twochat.dataobject.entity.Mapping;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -20,5 +21,7 @@ public interface MappingDao {
     int updateByPrimaryKey(Mapping record);
 
     List<Mapping> selectByMyUserId(String myUserId);
+
+    List<FriendsListDto> selectFriendListByMyUserId(String myUserId);
 
 }

@@ -25,19 +25,10 @@ public class ChatMsg implements Serializable {
      */
     private String acceptUserId;
 
-    /**
-     * 小头像
-     */
     private String msg;
 
-    /**
-     * 大头像
-     */
     private Integer signFlag;
 
-    /**
-     * 昵称
-     */
     private Date createTime;
 
     private static final long serialVersionUID = 1L;

@@ -1,14 +1,22 @@
 package com.cnwalking.twochat.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.cnwalking.twochat.common.MsgActionEnum;
 import com.cnwalking.twochat.common.Response;
 import com.cnwalking.twochat.dataobject.dto.FriendRequestDto;
+import com.cnwalking.twochat.dataobject.dto.FriendsListDto;
 import com.cnwalking.twochat.dataobject.dto.UserDto;
 import com.cnwalking.twochat.dataobject.dto.UserVo;
+import com.cnwalking.twochat.dataobject.entity.ChatMsg;
 import com.cnwalking.twochat.dataobject.entity.User;
 import com.cnwalking.twochat.service.UserService;
 import com.cnwalking.twochat.utils.FastDFSClient;
 import com.cnwalking.twochat.utils.FileUtils;
 import com.cnwalking.twochat.utils.ResponseUtils;
+import com.cnwalking.twochat.websocket.DataContent;
+import com.cnwalking.twochat.websocket.UserChannelMapping;
+import io.netty.channel.Channel;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -194,9 +202,47 @@ public class UserController {
             // 如果两边都互相发了请求,就要删除两个请求
             userService.deleteAddFriendsReq(acceptUserId,sendUserId);
 
+            // 再拉取一下请求列表
+            Channel sendChannel = UserChannelMapping.get(sendUserId);
+            if (sendChannel != null) {
+                DataContent dataContent = new DataContent();
+                dataContent.setAction(MsgActionEnum.PULL_FRIEND.type);
+                sendChannel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(dataContent)));
+            }
+
         }
         return ResponseUtils.returnDefaultSuccess();
     }
+
+    @ApiOperation(value = "通讯录列表", notes = "通讯录列表")
+    @PostMapping(value = "/friends/list")
+    public Response scanSearch(
+            @ApiParam(name = "userId", value = "用户id") @RequestParam(value = "userId") String userId
+    ) throws Exception{
+        log.info("通讯录列表,userId:{}", userId);
+        if (StringUtils.isBlank(userId)) {
+            return ResponseUtils.returnDefaultError();
+        }
+        // 添加到friends_request表中去
+        List<FriendsListDto> dtoList = userService.getFriendsList(userId);
+        log.info("通讯录列表,搜索结果:{}", JSON.toJSONString(dtoList));
+        return ResponseUtils.returnSuccess(dtoList);
+    }
+
+    @ApiOperation(value = "未签收消息的列表", notes = "未签收消息的列表")
+    @PostMapping(value = "/unReadMsg/list")
+    public Response unReadMsgList(
+            @ApiParam(name = "userId", value = "用户id") @RequestParam(value = "userId") String userId
+    ) throws Exception{
+        log.info("未签收消息的列表,userId:{}", userId);
+        if (StringUtils.isBlank(userId)) {
+            return ResponseUtils.returnDefaultError();
+        }
+        // 添加到friends_request表中去
+        List<ChatMsg> dtoList = userService.getUnReadMsgList(userId);
+        return ResponseUtils.returnSuccess(dtoList);
+    }
+
 
 
 }

@@ -23,9 +23,9 @@
     where id = #{id,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.cnwalking.twochat.dataobject.entity.ChatMsg" useGeneratedKeys="true">
-    insert into chat_msg (send_user_id, accept_user_id, msg, 
+    insert into chat_msg (id,send_user_id, accept_user_id, msg,
       sign_flag, create_time)
-    values (#{sendUserId,jdbcType=VARCHAR}, #{acceptUserId,jdbcType=VARCHAR}, #{msg,jdbcType=VARCHAR}, 
+    values (#{id},#{sendUserId,jdbcType=VARCHAR}, #{acceptUserId,jdbcType=VARCHAR}, #{msg,jdbcType=VARCHAR},
       #{signFlag,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.cnwalking.twochat.dataobject.entity.ChatMsg" useGeneratedKeys="true">
@@ -95,4 +95,16 @@
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+
+  <update id="updateByMsgIdList" parameterType="com.cnwalking.twochat.dataobject.entity.ChatMsg">
+    update chat_msg
+    set sign_flag = 1
+    where id in <foreach collection="list" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
+  </update>
+  <select id="getUnReadMsgList" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from chat_msg
+    where accept_user_id = #{acceptUserId,jdbcType=VARCHAR} and sign_flag = 0
+  </select>
 </mapper>

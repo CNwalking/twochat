@@ -1,9 +1,12 @@
 package com.cnwalking.twochat.service.impl;
 
+import com.cnwalking.twochat.dao.ChatMsgDao;
 import com.cnwalking.twochat.dao.FriendsRequestDao;
 import com.cnwalking.twochat.dao.MappingDao;
 import com.cnwalking.twochat.dao.UserDao;
 import com.cnwalking.twochat.dataobject.dto.FriendRequestDto;
+import com.cnwalking.twochat.dataobject.dto.FriendsListDto;
+import com.cnwalking.twochat.dataobject.entity.ChatMsg;
 import com.cnwalking.twochat.dataobject.entity.FriendsRequest;
 import com.cnwalking.twochat.dataobject.entity.Mapping;
 import com.cnwalking.twochat.dataobject.entity.User;
@@ -12,6 +15,7 @@ import com.cnwalking.twochat.utils.FastDFSClient;
 import com.cnwalking.twochat.utils.FileUtils;
 import com.cnwalking.twochat.utils.MD5Encrypt;
 import com.cnwalking.twochat.utils.QRCodeUtils;
+import com.cnwalking.twochat.websocket.MsgOfChat;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -40,6 +44,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private FriendsRequestDao friendsRequestDao;
+
+    @Autowired
+    private ChatMsgDao chatMsgDao;
 
     @Autowired
     private QRCodeUtils qrCodeUtils;
@@ -168,10 +175,42 @@ public class UserServiceImpl implements UserService {
         Mapping mapping2= new Mapping();
         String id2 = Sid.nextShort();
         mapping2.setId(id2);
-        mapping2.setMyUserId(sendUserId);
-        mapping2.setFriendUserId(acceptUserId);
+        mapping2.setMyUserId(acceptUserId);
+        mapping2.setFriendUserId(sendUserId);
 
         mappingDao.insert(mapping1);
         mappingDao.insert(mapping2);
+
+
     }
+
+    @Override
+    public List<FriendsListDto> getFriendsList(String userId) {
+        List<FriendsListDto> list = mappingDao.selectFriendListByMyUserId(userId);
+        return list;
+    }
+
+    @Override
+    public String saveMsg(MsgOfChat chatMsg) {
+        ChatMsg msg = new ChatMsg();
+        String msgId = Sid.nextShort();
+        msg.setId(msgId);
+        msg.setSendUserId(chatMsg.getSenderId());
+        msg.setAcceptUserId(chatMsg.getReceiverId());
+        msg.setMsg(chatMsg.getMsg());
+        // 0 未签收 1签收
+        msg.setSignFlag(0);
+        msg.setCreateTime(new Date());
+
+        chatMsgDao.insert(msg);
+        return msgId;
+    }
+
+    @Override
+    public void updateMsgSigned(List<String> msgIdList) {
+        chatMsgDao.updateByMsgIdList(msgIdList);
+    }
+
+    @Override
+    public List<ChatMsg> getUnReadMsgList(String acceptUserId) { return chatMsgDao.getUnReadMsgList(acceptUserId); }
 }
