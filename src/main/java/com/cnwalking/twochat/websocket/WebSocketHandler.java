@@ -12,6 +12,7 @@ import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.concurrent.GlobalEventExecutor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,12 +25,13 @@ import java.util.List;
 /**
  * 用于处理文本
  */
+@Slf4j
 public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
 
     /**
      *   类似于channel的pool
      */
-    private static ChannelGroup ClientGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+    public static ChannelGroup ClientGroup = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
 //    @Autowired
 //    private UserService userService;
@@ -119,7 +121,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
 
         } else if (action == MsgActionEnum.KEEPALIVE.type) {
             //  2.4  心跳类型的消息
-            System.out.println("accept from channel [" + currentChannel + "]'s beats...");
+            log.info("accept from channel [" + currentChannel + "]'s beats...");
         }
     }
 
