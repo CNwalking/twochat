@@ -5,6 +5,9 @@ import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 
+/**
+ * @author walking
+ */
 public class HeartBeatHandler extends ChannelInboundHandlerAdapter {
 
     @Override
